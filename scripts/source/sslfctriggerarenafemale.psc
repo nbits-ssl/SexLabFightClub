@@ -1,0 +1,1 @@
+Scriptname sslfctriggerarenafemale extends ObjectReference  

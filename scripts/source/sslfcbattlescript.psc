@@ -7,6 +7,8 @@ Function Quit(ReferenceAlias LoserRef)
 	
 	Actor ActorM = MaleFighter.GetActorRef()
 	Actor ActorF = FemaleFighter.GetActorRef()
+	ActorM.RemoveSpell(SSLFCEbonyflesh)
+	ActorF.RemoveSpell(SSLFCEbonyflesh)
 	
 	if (LoserRef == FemaleFighter)
 		appUtil.log("Female losed.")
@@ -23,6 +25,12 @@ Function Quit(ReferenceAlias LoserRef)
 	ActorM.StopCombat()
 	ActorF.StopCombat()
 	
+	if (ActorM.GetAV("Health") <= 0)
+		ActorM.ForceAV("Health", 10)
+	elseif (ActorF.GetAV("Health") <= 0)
+		ActorF.ForceAV("Health", 10)
+	endif
+	
 	MaleFighter.Clear()
 	FemaleFighter.Clear()
 	
@@ -30,6 +38,8 @@ Function Quit(ReferenceAlias LoserRef)
 		appUtil.log("Male losed.")
 		if (SSLFCMainQuest.IsRunning() && SSLFCMainQuest.GetStage() < 40)
 			SSLFCMainQuest.SetStage(40)
+		elseif (ActorF == Game.GetPlayer())
+			SSLFCBattleLoop.SetStage(31)
 		else
 			SSLFCBattleLoop.SetStage(30)
 		endif
@@ -45,6 +55,8 @@ Event EndSexEventFirstFight(int tid, bool HasPlayer)
 	
 	if (SSLFCMainQuest.IsRunning() && SSLFCMainQuest.GetStage() < 40)
 		SSLFCMainQuest.SetStage(40)
+	elseif (HasPlayer)
+		SSLFCBattleLoop.SetStage(31)
 	else
 		SSLFCBattleLoop.SetStage(30)
 	endif
@@ -57,3 +69,5 @@ ReferenceAlias Property FemaleFighter  Auto
 SexLabFramework Property SexLab  Auto  
 Quest Property SSLFCMainQuest  Auto  
 Quest Property SSLFCBattleLoop  Auto  
+
+SPELL Property SSLFCEbonyflesh  Auto  
