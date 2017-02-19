@@ -5,7 +5,7 @@ Scriptname SSLFC_SF_SSLFCMainTour_04028A9E Extends Scene Hidden
 ;BEGIN FRAGMENT Fragment_0
 Function Fragment_0()
 ;BEGIN CODE
-GetOwningQuest().SetStage(100)
+GetOwningQuest().setstage(60)
 ;END CODE
 EndFunction
 ;END FRAGMENT
