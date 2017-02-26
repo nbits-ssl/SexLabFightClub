@@ -7,6 +7,11 @@ Scriptname SSLFC_QF_SSLFCBattleLoop Extends Quest Hidden
 ReferenceAlias Property Alias_Announcer Auto
 ;END ALIAS PROPERTY
 
+;BEGIN ALIAS PROPERTY MaleFighter
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_MaleFighter Auto
+;END ALIAS PROPERTY
+
 ;BEGIN ALIAS PROPERTY FemaleFighter
 ;ALIAS PROPERTY TYPE ReferenceAlias
 ReferenceAlias Property Alias_FemaleFighter Auto
@@ -15,11 +20,6 @@ ReferenceAlias Property Alias_FemaleFighter Auto
 ;BEGIN ALIAS PROPERTY Player
 ;ALIAS PROPERTY TYPE ReferenceAlias
 ReferenceAlias Property Alias_Player Auto
-;END ALIAS PROPERTY
-
-;BEGIN ALIAS PROPERTY MaleFighter
-;ALIAS PROPERTY TYPE ReferenceAlias
-ReferenceAlias Property Alias_MaleFighter Auto
 ;END ALIAS PROPERTY
 
 ;BEGIN ALIAS PROPERTY KeyManager
@@ -32,24 +32,15 @@ ReferenceAlias Property Alias_KeyManager Auto
 ReferenceAlias Property Alias_ArenaFemaleMarker Auto
 ;END ALIAS PROPERTY
 
-;BEGIN FRAGMENT Fragment_14
-Function Fragment_14()
-;BEGIN AUTOCAST TYPE sslfcscript
-Quest __temp = self as Quest
-sslfcscript kmyQuest = __temp as sslfcscript
-;END AUTOCAST
-;BEGIN CODE
-SSLFCRingDoor.Lock()
-SSLFCArenaNavCut.Enable()
-SSLFCArenaInvisibleWall.Enable()
-kmyQuest.StartArenaBattle(Alias_MaleFighter, Alias_Player)
-;END CODE
-EndFunction
-;END FRAGMENT
+;BEGIN ALIAS PROPERTY winner
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_winner Auto
+;END ALIAS PROPERTY
 
 ;BEGIN FRAGMENT Fragment_10
 Function Fragment_10()
 ;BEGIN CODE
+self.SetActive()
 self.SetObjectiveDisplayed(11)
 ;END CODE
 EndFunction
@@ -68,11 +59,46 @@ Alias_MaleFighter.TryToEvaluatePackage()
 EndFunction
 ;END FRAGMENT
 
-;BEGIN FRAGMENT Fragment_0
-Function Fragment_0()
+;BEGIN FRAGMENT Fragment_16
+Function Fragment_16()
+;BEGIN AUTOCAST TYPE sslfcscript
+Quest __temp = self as Quest
+sslfcscript kmyQuest = __temp as sslfcscript
+;END AUTOCAST
 ;BEGIN CODE
-SSLFCBattleLoopEnter.Start()
-;self.SetStage(11)
+SSLFCBattleLoopEnterWithPlayer.Start()
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_2
+Function Fragment_2()
+;BEGIN AUTOCAST TYPE sslfcscript
+Quest __temp = self as Quest
+sslfcscript kmyQuest = __temp as sslfcscript
+;END AUTOCAST
+;BEGIN CODE
+SSLFCRingDoor.SetOpen(false)
+SSLFCRingDoor.Lock()
+SSLFCArenaNavCut.Enable()
+SSLFCArenaInvisibleWall.Enable()
+kmyQuest.StartArenaBattle(Alias_MaleFighter, Alias_FemaleFighter)
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_14
+Function Fragment_14()
+;BEGIN AUTOCAST TYPE sslfcscript
+Quest __temp = self as Quest
+sslfcscript kmyQuest = __temp as sslfcscript
+;END AUTOCAST
+;BEGIN CODE
+SSLFCRingDoor.SetOpen(false)
+SSLFCRingDoor.Lock()
+SSLFCArenaNavCut.Enable()
+SSLFCArenaInvisibleWall.Enable()
+kmyQuest.StartArenaBattle(Alias_MaleFighter, Alias_Player)
 ;END CODE
 EndFunction
 ;END FRAGMENT
@@ -91,14 +117,14 @@ Alias_MaleFighter.TryToEvaluatePackage()
 EndFunction
 ;END FRAGMENT
 
-;BEGIN FRAGMENT Fragment_16
-Function Fragment_16()
-;BEGIN AUTOCAST TYPE sslfcscript
-Quest __temp = self as Quest
-sslfcscript kmyQuest = __temp as sslfcscript
-;END AUTOCAST
+;BEGIN FRAGMENT Fragment_0
+Function Fragment_0()
 ;BEGIN CODE
-SSLFCBattleLoopEnterWithPlayer.Start()
+if (Utility.RandomInt() < 50)
+	self.SetStage(11)
+else
+	SSLFCBattleLoopEnter.Start()
+endif
 ;END CODE
 EndFunction
 ;END FRAGMENT
@@ -110,7 +136,7 @@ Quest __temp = self as Quest
 sslfcscript kmyQuest = __temp as sslfcscript
 ;END AUTOCAST
 ;BEGIN CODE
-Utility.Wait(2)
+Utility.Wait(1)
 float Time = Utility.GetCurrentGameTime()
 Time -= Math.Floor(Time)
 Time *= 24
@@ -118,22 +144,9 @@ int hour = (Time as Int)
 
 if (hour < 21 && hour > 12)
 	kmyQuest.StartArenaBattleLoop()
+else
+	self.SetStage(101)
 endif
-;END CODE
-EndFunction
-;END FRAGMENT
-
-;BEGIN FRAGMENT Fragment_2
-Function Fragment_2()
-;BEGIN AUTOCAST TYPE sslfcscript
-Quest __temp = self as Quest
-sslfcscript kmyQuest = __temp as sslfcscript
-;END AUTOCAST
-;BEGIN CODE
-SSLFCRingDoor.Lock()
-SSLFCArenaNavCut.Enable()
-SSLFCArenaInvisibleWall.Enable()
-kmyQuest.StartArenaBattle(Alias_MaleFighter, Alias_FemaleFighter)
 ;END CODE
 EndFunction
 ;END FRAGMENT

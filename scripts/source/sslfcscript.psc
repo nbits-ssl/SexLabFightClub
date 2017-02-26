@@ -27,6 +27,7 @@ Function StartArenaBattle(ReferenceAlias MaleRef, ReferenceAlias FemaleRef)
 	
 	MaleFighter.ForceRefTo(MaleRef.GetActorRef())
 	FemaleFighter.ForceRefTo(FemaleRef.GetActorRef())
+	FemaleRef.GetActorRef().SetFactionRank(SSLFCExtasyFaction, 0)
 	
 	appUtil.log("Male Fighter: " + MaleFighter.GetActorRef().GetActorBase().GetName())
 	appUtil.log("Female Fighter: " + FemaleFighter.GetActorRef().GetActorBase().GetName())
@@ -39,3 +40,5 @@ ReferenceAlias Property FirstMale  Auto
 ReferenceAlias Property FirstFemale  Auto  
 ReferenceAlias Property MaleFighter  Auto
 ReferenceAlias Property FemaleFighter  Auto  
+
+Faction Property SSLFCExtasyFaction  Auto  
