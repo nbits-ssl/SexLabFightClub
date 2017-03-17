@@ -9,7 +9,7 @@ Event OnEffectStart(actor target, actor caster)
 		if (tw)
 			target.DropObject(tw, 1)
 		endif
-		target.SetFactionRank(ArousalFaction, 50)
+		target.SetFactionRank(ArousalFaction, 75)
 		debug.sendAnimationEvent(target, "BleedOutStart")
 		Utility.wait(2.5)
 		;caster.PushActorAway(target, 1.0)

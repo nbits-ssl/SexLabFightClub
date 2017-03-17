@@ -2,9 +2,9 @@
 ;NEXT FRAGMENT INDEX 7
 Scriptname SSLFC_QF_CQRigna01 Extends Quest Hidden
 
-;BEGIN ALIAS PROPERTY Player
+;BEGIN ALIAS PROPERTY Closer
 ;ALIAS PROPERTY TYPE ReferenceAlias
-ReferenceAlias Property Alias_Player Auto
+ReferenceAlias Property Alias_Closer Auto
 ;END ALIAS PROPERTY
 
 ;BEGIN ALIAS PROPERTY opener
@@ -12,9 +12,9 @@ ReferenceAlias Property Alias_Player Auto
 ReferenceAlias Property Alias_opener Auto
 ;END ALIAS PROPERTY
 
-;BEGIN ALIAS PROPERTY Closer
+;BEGIN ALIAS PROPERTY Player
 ;ALIAS PROPERTY TYPE ReferenceAlias
-ReferenceAlias Property Alias_Closer Auto
+ReferenceAlias Property Alias_Player Auto
 ;END ALIAS PROPERTY
 
 ;BEGIN FRAGMENT Fragment_5
@@ -52,6 +52,7 @@ EndFunction
 ;BEGIN FRAGMENT Fragment_0
 Function Fragment_0()
 ;BEGIN CODE
+self.SetActive()
 self.SetObjectiveDisplayed(0)
 
 Actor Player = Alias_Player.GetActorRef()

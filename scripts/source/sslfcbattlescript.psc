@@ -3,31 +3,49 @@ Scriptname sslfcbattlescript extends Quest
 sslfc_util Property appUtil Auto
 
 Function Quit(ReferenceAlias LoserRef)
-	Utility.Wait(2.5)
+	Utility.Wait(5)
 	bool needsexlab = false
-	
+
 	Actor ActorM = MaleFighter.GetActorRef()
 	Actor ActorF = FemaleFighter.GetActorRef()
-	if (ActorF.GetAV("Health") < 10.0)
-		ActorF.ModAV("Health", 10.0)
+	if (PlayerActor.GetAV("Health") < 10.0)
+		PlayerActor.ModAV("Health", 50.0)
 	endif
-
-	ActorM.StopCombat()
-	ActorF.StopCombat()
-
+	Announcer.GetActorRef().SetFactionRank(SSLFCTodayBattleCount, 1)
+	ActorM.SetFactionRank(SSLFCTodayBattleCount, 1)
+	ActorF.SetFactionRank(SSLFCTodayBattleCount, 1)
+	
 	if (LoserRef == FemaleFighter)
 		needsexlab = true
+		SSLFCBattleLoopWinner.ForceRefTo(ActorM)
+	else
+		SSLFCBattleLoopWinner.ForceRefTo(ActorF)
 	endif
+	
+	; double check with combat state change
+	self.removeBattleSpells(ActorM)
+	self.removeBattleSpells(ActorF)
+	
+	self.changeRelationshipRank(ActorM, ActorF, needsexlab)
+	appUtil.log("change relation.")
+	
+	ActorM.RemoveFromFaction(SSLFCMaleFaction)
+	ActorF.RemoveFromFaction(SSLFCFemaleFaction)
+	ActorM.StopCombat()
+	ActorF.StopCombat()
 	
 	self.payBounty(ActorM, needsexlab)
 	self.payBounty(ActorF, !needsexlab)
 	appUtil.log("pay bounty.")
 	
-	MaleFighter.Clear()
-	FemaleFighter.Clear()
+	;MaleFighter.Clear()
+	;FemaleFighter.Clear()
 	
 	if (needsexlab)
 		appUtil.log("Female losed.")
+		ActorM.Say(SSLFCBattleLoop2ndRoundStartTopic)
+		Utility.Wait(3.0)
+		
 		sslBaseAnimation[] anims
 		anims =  SexLab.GetAnimationsByTags(2, "MF,Aggressive", "", true)
 		actor[] sexActors = new actor[2]
@@ -35,9 +53,11 @@ Function Quit(ReferenceAlias LoserRef)
 		sexActors[1] = ActorM
 		
 		RegisterForModEvent("HookAnimationEnd_FirstFight", "EndSexEventFirstFight")
-		SexLab.StartSex(sexActors, anims, victim=ActorF, hook="FirstFight")
+		SexLab.StartSex(sexActors, anims, victim=ActorF, CenterOn=ActorM, hook="FirstFight")
 	else
 		appUtil.log("Male losed.")
+		MaleFighter.Clear()
+		FemaleFighter.Clear()
 		
 		if (ActorF == Game.GetPlayer())
 			self.gotoNextStage(true)
@@ -50,13 +70,14 @@ Function Quit(ReferenceAlias LoserRef)
 EndFunction
 
 Event EndSexEventFirstFight(int tid, bool HasPlayer)
+	;sslThreadController Thread = SexLab.GetController(tid)
+	;Actor akActor = Thread.Positions[0]
 	appUtil.log("EndSexEvent Hook")
-	sslThreadController Thread = SexLab.GetController(tid)
-	Actor akActor = Thread.Positions[0]
+	MaleFighter.Clear()
+	FemaleFighter.Clear()
+	UnregisterForModEvent("HookAnimationEnd_FirstFight")
 	
 	self.gotoNextStage(HasPlayer)
-	
-	UnregisterForModEvent("HookAnimationEnd_FirstFight")
 EndEvent
 
 ; ugly goto function
@@ -86,11 +107,62 @@ Function payBounty(Actor act, Bool isWinner)
 	endif
 EndFunction
 
+Function changeRelationshipRank(Actor male, Actor female, Bool winnerIsMale)
+	float percentage
+	int rank = male.GetRelationshipRank(female)
+	
+	if (rank)
+		if (rank >= 3 || rank <= -2)
+			return
+		endif
+	else
+		male.SetRelationshipRank(female, 0)
+		rank = 0
+	endif
+
+	if (winnerIsMale)
+		percentage = male.GetAVPercentage("Health")
+	else
+		percentage = female.GetAVPercentage("Health")
+	endif
+	appUtil.log("Winner Health: " + percentage)
+
+	appUtil.log("base relationshiprank: " + rank)
+	if (percentage > 0.85)
+		male.SetRelationshipRank(female, rank - 1)
+		appUtil.log("relationshiprank: DOWN")
+	elseif (percentage < 0.7)
+		male.SetRelationshipRank(female, rank + 1)
+		appUtil.log("relationshiprank: UP")
+	else
+		appUtil.log("relationshiprank: NO CHANGE")
+	endif
+EndFunction
+
+Function removeBattleSpells(Actor act)
+	act.RemoveSpell(SSLFCEbonyflesh)
+	act.RemoveSpell(SSLFCSlowAbility)
+EndFunction
+
 ReferenceAlias Property MaleFighter  Auto  
 ReferenceAlias Property FemaleFighter  Auto  
 ReferenceAlias Property SSLFCBattleLoopWinner  Auto  
+
 SexLabFramework Property SexLab  Auto  
+
 Quest Property SSLFCMainQuest  Auto  
 Quest Property SSLFCBattleLoop  Auto  
 MiscObject Property Gold001  Auto  
 Faction Property SSLFCExtasyFaction  Auto  
+
+Actor Property PlayerActor  Auto  
+SPELL Property SSLFCEbonyflesh  Auto  
+SPELL Property SSLFCSlowAbility  Auto  
+
+Topic Property SSLFCBattleLoop2ndRoundStartTopic  Auto  
+
+ReferenceAlias Property Announcer  Auto  
+Faction Property SSLFCTodayBattleCount  Auto  
+
+Faction Property SSLFCMaleFaction  Auto  
+Faction Property SSLFCFemaleFaction  Auto  

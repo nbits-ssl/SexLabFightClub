@@ -12,24 +12,15 @@ ReferenceAlias Property Alias_Closer Auto
 ReferenceAlias Property Alias_opener Auto
 ;END ALIAS PROPERTY
 
-;BEGIN ALIAS PROPERTY Player
-;ALIAS PROPERTY TYPE ReferenceAlias
-ReferenceAlias Property Alias_Player Auto
-;END ALIAS PROPERTY
-
 ;BEGIN ALIAS PROPERTY TargetContainer
 ;ALIAS PROPERTY TYPE ReferenceAlias
 ReferenceAlias Property Alias_TargetContainer Auto
 ;END ALIAS PROPERTY
 
-;BEGIN FRAGMENT Fragment_7
-Function Fragment_7()
-;BEGIN CODE
-self.SetObjectiveCompleted(0)
-self.SetObjectiveDisplayed(1)
-;END CODE
-EndFunction
-;END FRAGMENT
+;BEGIN ALIAS PROPERTY Player
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_Player Auto
+;END ALIAS PROPERTY
 
 ;BEGIN FRAGMENT Fragment_5
 Function Fragment_5()
@@ -48,21 +39,6 @@ self.Stop()
 EndFunction
 ;END FRAGMENT
 
-;BEGIN FRAGMENT Fragment_0
-Function Fragment_0()
-;BEGIN CODE
-self.SetObjectiveDisplayed(0)
-
-ObjectReference TargetContainer = Alias_TargetContainer.GetRef()
-TargetContainer.RemoveAllItems()
-TargetContainer.AddItem(TargetItem, TargetItemNum)
-
-Actor Opener = Alias_Opener.GetActorRef()
-Opener.SetFactionRank(SSLFCTodayWorkCount, 1)
-;END CODE
-EndFunction
-;END FRAGMENT
-
 ;BEGIN FRAGMENT Fragment_2
 Function Fragment_2()
 ;BEGIN AUTOCAST TYPE sslfcscript
@@ -76,6 +52,31 @@ Player.RemoveItem(TargetItem, TargetItemNum)
 Player.AddItem(FeeLItem, FeeItemNum)
 kmyQuest.SetRelationUp(Alias_Player, Alias_Opener)
 self.Stop()
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_0
+Function Fragment_0()
+;BEGIN CODE
+self.SetActive()
+self.SetObjectiveDisplayed(0)
+
+ObjectReference TargetContainer = Alias_TargetContainer.GetRef()
+TargetContainer.RemoveAllItems()
+TargetContainer.AddItem(TargetItem, TargetItemNum)
+
+Actor Opener = Alias_Opener.GetActorRef()
+Opener.SetFactionRank(SSLFCTodayWorkCount, 1)
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_7
+Function Fragment_7()
+;BEGIN CODE
+self.SetObjectiveCompleted(0)
+self.SetObjectiveDisplayed(1)
 ;END CODE
 EndFunction
 ;END FRAGMENT

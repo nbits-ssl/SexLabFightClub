@@ -84,7 +84,8 @@ Quest Property SSLFCBattle  Auto
 Quest Property SSLFCBattleLoop  Auto  
 
 ReferenceAlias Property FirstMale  Auto  
-ReferenceAlias Property FirstFemale  Auto  
+ReferenceAlias Property FirstFemale  Auto
+
 ReferenceAlias Property MaleFighter  Auto
 ReferenceAlias Property FemaleFighter  Auto  
 

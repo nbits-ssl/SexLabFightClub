@@ -19,11 +19,12 @@ GotoState("Busy")
 		Actor selfact = self.GetActorRef()
 		Armor selfarmor = selfact.GetWornForm(0x00000004) as Armor
 		Int chance = Utility.RandomInt()
-		if (selfarmor && chance < 20)
+		if (selfarmor && chance < 33)
+		; if (selfarmor)
 			selfact.UnequipItemSlot(32)
 			selfact.RemoveItem(selfarmor)
-			; dispell slow ability can't back normal speeemulti
-			; selfact.AddSpell(SSLFCSlowAbility)
+			selfact.AddSpell(SSLFCSlowAbility)
+			; selfact.AddItem(SSLFCShame, 1)
 		endif
 	endif
 	
@@ -40,3 +41,5 @@ State Busy
 EndState
 
 SPELL Property SSLFCSlowAbility  Auto  
+
+MiscObject Property SSLFCShame  Auto  

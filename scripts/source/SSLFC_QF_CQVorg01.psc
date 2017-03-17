@@ -2,14 +2,9 @@
 ;NEXT FRAGMENT INDEX 8
 Scriptname SSLFC_QF_CQVorg01 Extends Quest Hidden
 
-;BEGIN ALIAS PROPERTY Player
+;BEGIN ALIAS PROPERTY Closer
 ;ALIAS PROPERTY TYPE ReferenceAlias
-ReferenceAlias Property Alias_Player Auto
-;END ALIAS PROPERTY
-
-;BEGIN ALIAS PROPERTY TargetContainer
-;ALIAS PROPERTY TYPE ReferenceAlias
-ReferenceAlias Property Alias_TargetContainer Auto
+ReferenceAlias Property Alias_Closer Auto
 ;END ALIAS PROPERTY
 
 ;BEGIN ALIAS PROPERTY opener
@@ -17,19 +12,15 @@ ReferenceAlias Property Alias_TargetContainer Auto
 ReferenceAlias Property Alias_opener Auto
 ;END ALIAS PROPERTY
 
-;BEGIN ALIAS PROPERTY Closer
+;BEGIN ALIAS PROPERTY TargetContainer
 ;ALIAS PROPERTY TYPE ReferenceAlias
-ReferenceAlias Property Alias_Closer Auto
+ReferenceAlias Property Alias_TargetContainer Auto
 ;END ALIAS PROPERTY
 
-;BEGIN FRAGMENT Fragment_7
-Function Fragment_7()
-;BEGIN CODE
-self.SetObjectiveCompleted(0)
-self.SetObjectiveDisplayed(1)
-;END CODE
-EndFunction
-;END FRAGMENT
+;BEGIN ALIAS PROPERTY Player
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_Player Auto
+;END ALIAS PROPERTY
 
 ;BEGIN FRAGMENT Fragment_5
 Function Fragment_5()
@@ -68,6 +59,7 @@ EndFunction
 ;BEGIN FRAGMENT Fragment_0
 Function Fragment_0()
 ;BEGIN CODE
+self.SetActive()
 self.SetObjectiveDisplayed(0)
 
 ObjectReference TargetContainer = Alias_TargetContainer.GetRef()
@@ -75,6 +67,15 @@ TargetContainer.Reset()
 
 Actor Opener = Alias_Opener.GetActorRef()
 Opener.SetFactionRank(SSLFCTodayWorkCount, 1)
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_7
+Function Fragment_7()
+;BEGIN CODE
+self.SetObjectiveCompleted(0)
+self.SetObjectiveDisplayed(1)
 ;END CODE
 EndFunction
 ;END FRAGMENT

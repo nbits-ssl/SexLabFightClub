@@ -34,20 +34,6 @@ self.Stop()
 EndFunction
 ;END FRAGMENT
 
-;BEGIN FRAGMENT Fragment_0
-Function Fragment_0()
-;BEGIN CODE
-self.SetObjectiveDisplayed(0)
-
-Actor Player = Alias_Player.GetActorRef()
-Player.AddItem(TargetItem, TargetItemNum)
-
-Actor Opener = Alias_Opener.GetActorRef()
-Opener.SetFactionRank(SSLFCTodayWorkCount, 1)
-;END CODE
-EndFunction
-;END FRAGMENT
-
 ;BEGIN FRAGMENT Fragment_2
 Function Fragment_2()
 ;BEGIN AUTOCAST TYPE sslfcscript
@@ -61,6 +47,21 @@ Player.RemoveItem(TargetItem, TargetItemNum)
 Player.AddItem(FeeLItem, FeeItemNum)
 kmyQuest.SetRelationUp(Alias_Player, Alias_Opener)
 self.Stop()
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_0
+Function Fragment_0()
+;BEGIN CODE
+self.SetActive()
+self.SetObjectiveDisplayed(0)
+
+Actor Player = Alias_Player.GetActorRef()
+Player.AddItem(TargetItem, TargetItemNum)
+
+Actor Opener = Alias_Opener.GetActorRef()
+Opener.SetFactionRank(SSLFCTodayWorkCount, 1)
 ;END CODE
 EndFunction
 ;END FRAGMENT
