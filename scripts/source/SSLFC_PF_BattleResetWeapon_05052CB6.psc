@@ -1,10 +1,11 @@
 ;BEGIN FRAGMENT CODE - Do not edit anything between this and the end comment
 ;NEXT FRAGMENT INDEX 2
-Scriptname SSLFC_BattleResetWeapon_05052CB6 Extends Package Hidden
+Scriptname SSLFC_PF_BattleResetWeapon_05052CB6 Extends Package Hidden
 
 ;BEGIN FRAGMENT Fragment_1
 Function Fragment_1(Actor akActor)
 ;BEGIN CODE
+SSLFCBGVandeliusRape01.Reset()
 SSLFCBGVandeliusRape01.Start()
 ;END CODE
 EndFunction

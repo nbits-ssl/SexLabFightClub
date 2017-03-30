@@ -4,7 +4,6 @@ sslfc_util Property appUtil Auto
 
 Function Quit(ReferenceAlias LoserRef)
 	Utility.Wait(5)
-	bool needsexlab = false
 
 	Actor ActorM = MaleFighter.GetActorRef()
 	Actor ActorF = FemaleFighter.GetActorRef()
@@ -16,44 +15,51 @@ Function Quit(ReferenceAlias LoserRef)
 	ActorF.SetFactionRank(SSLFCTodayBattleCount, 1)
 	
 	if (LoserRef == FemaleFighter)
-		needsexlab = true
 		SSLFCBattleLoopWinner.ForceRefTo(ActorM)
+		SSLFCBattleLoopLoser.ForceRefTo(ActorF)
 	else
 		SSLFCBattleLoopWinner.ForceRefTo(ActorF)
+		SSLFCBattleLoopLoser.ForceRefTo(ActorM)
 	endif
+	Actor ActorWinner = SSLFCBattleLoopWinner.GetActorRef()
+	Actor ActorLoser = SSLFCBattleLoopLoser.GetActorRef()
 	
 	; double check with combat state change
 	self.removeBattleSpells(ActorM)
 	self.removeBattleSpells(ActorF)
 	
-	self.changeRelationshipRank(ActorM, ActorF, needsexlab)
+	self.changeRelationshipRank(ActorWinner, ActorLoser)
 	appUtil.log("change relation.")
 	
 	ActorM.RemoveFromFaction(SSLFCMaleFaction)
 	ActorF.RemoveFromFaction(SSLFCFemaleFaction)
 	ActorM.StopCombat()
 	ActorF.StopCombat()
+
+	self.addBattleCount(ActorWinner, true)
+	self.addBattleCount(ActorLoser, false)
+	appUtil.log("add battle count.")
 	
-	self.payBounty(ActorM, needsexlab)
-	self.payBounty(ActorF, !needsexlab)
+	self.payBounty(ActorWinner, true)
+	self.payBounty(ActorLoser, false)
 	appUtil.log("pay bounty.")
 	
 	;MaleFighter.Clear()
 	;FemaleFighter.Clear()
 	
-	if (needsexlab)
+	if (ActorLoser.GetActorBase().GetSex() == 1) ; Female Loser
 		appUtil.log("Female losed.")
-		ActorM.Say(SSLFCBattleLoop2ndRoundStartTopic)
+		ActorWinner.Say(SSLFCBattleLoop2ndRoundStartTopic)
 		Utility.Wait(3.0)
 		
 		sslBaseAnimation[] anims
 		anims =  SexLab.GetAnimationsByTags(2, "MF,Aggressive", "", true)
 		actor[] sexActors = new actor[2]
-		sexActors[0] = ActorF
-		sexActors[1] = ActorM
+		sexActors[0] = ActorLoser
+		sexActors[1] = ActorWinner
 		
 		RegisterForModEvent("HookAnimationEnd_FirstFight", "EndSexEventFirstFight")
-		SexLab.StartSex(sexActors, anims, victim=ActorF, CenterOn=ActorM, hook="FirstFight")
+		SexLab.StartSex(sexActors, anims, victim=ActorLoser, CenterOn=ActorWinner, hook="FirstFight")
 	else
 		appUtil.log("Male losed.")
 		MaleFighter.Clear()
@@ -91,6 +97,15 @@ Function gotoNextStage(bool HasPlayer)
 	endif
 EndFunction
 
+Function addBattleCount(Actor act, Bool isWinner)
+	int rank = act.GetFactionRank(SSLFCBattleCount)
+	if (rank && rank < 100)
+		act.SetFactionRank(SSLFCBattleCount, rank + 1)
+	else
+		act.SetFactionRank(SSLFCBattleCount, 1)
+	endif
+EndFunction
+
 Function payBounty(Actor act, Bool isWinner)
 	ActorBase actbase = act.GetActorBase()
 	int actsex = actBase.GetSex()
@@ -107,32 +122,28 @@ Function payBounty(Actor act, Bool isWinner)
 	endif
 EndFunction
 
-Function changeRelationshipRank(Actor male, Actor female, Bool winnerIsMale)
+Function changeRelationshipRank(Actor actwinner, Actor actloser)
 	float percentage
-	int rank = male.GetRelationshipRank(female)
+	int rank = actwinner.GetRelationshipRank(actloser)
 	
 	if (rank)
 		if (rank >= 3 || rank <= -2)
 			return
 		endif
 	else
-		male.SetRelationshipRank(female, 0)
+		actwinner.SetRelationshipRank(actloser, 0)
 		rank = 0
 	endif
 
-	if (winnerIsMale)
-		percentage = male.GetAVPercentage("Health")
-	else
-		percentage = female.GetAVPercentage("Health")
-	endif
+	percentage = actwinner.GetAVPercentage("Health")
 	appUtil.log("Winner Health: " + percentage)
 
 	appUtil.log("base relationshiprank: " + rank)
 	if (percentage > 0.85)
-		male.SetRelationshipRank(female, rank - 1)
+		actwinner.SetRelationshipRank(actloser, rank - 1)
 		appUtil.log("relationshiprank: DOWN")
 	elseif (percentage < 0.7)
-		male.SetRelationshipRank(female, rank + 1)
+		actwinner.SetRelationshipRank(actloser, rank + 1)
 		appUtil.log("relationshiprank: UP")
 	else
 		appUtil.log("relationshiprank: NO CHANGE")
@@ -166,3 +177,9 @@ Faction Property SSLFCTodayBattleCount  Auto
 
 Faction Property SSLFCMaleFaction  Auto  
 Faction Property SSLFCFemaleFaction  Auto  
+
+Faction Property SSLFCBattleCount  Auto  
+
+Quest Property SSLFCBGBattleLoopAfter01  Auto  
+
+ReferenceAlias Property SSLFCBattleLoopLoser  Auto  

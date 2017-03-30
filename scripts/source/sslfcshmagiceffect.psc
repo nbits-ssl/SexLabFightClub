@@ -17,6 +17,7 @@ Event OnEffectStart(actor target, actor caster)
 		int exfpt = target.GetFactionRank(SSLFCExtasyFaction) + 1
 		target.SetFactionRank(SSLFCExtasyFaction, exfpt)
 		debug.trace("================= exfpt " + exfpt)
+		debug.sendAnimationEvent(target, "IdleForceDefaultState")
 		
 		if (exfpt >= 5)
 			target.ModAV("Health", -20.0)

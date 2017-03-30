@@ -16,11 +16,17 @@ EndFunction
 Function StartArenaBattleLoop()
 	appUtil.log("ArenaBattleLoop Started.")
 	
-	if (!SSLFCBattleLoop.IsRunning())
+	if (SSLFCBattleLoop.IsRunning() == false)
 		SSLFCBattleLoop.Start()
+	endif
+	if (SSLFCBattleLoop.IsRunning())
+		appUtil.log("BattleLoop quest: running")
+	else
+		appUtil.log("BattleLoop quest: not running cause some fatal reason")
 	endif
 	
 	int queststage = SSLFCBattleLoop.GetStage()
+	appUtil.log("BattleLoop quest stage: " + queststage)
 	if (queststage == 0 || queststage == 100 || queststage == 101)
 		SSLFCBattleLoop.Reset()
 		Utility.Wait(2)
