@@ -1,24 +1,24 @@
-SexLab FightClub
+ï»¿SexLab FightClub
 ---------------------------------------------------
 
-•K{:
+å¿…é ˆ:
  Dawnguard
  SexLab 1.6x
  Sexlab Aroused Redux
- MNC 9.3(‘¼ƒ‚ƒ“ƒXƒ^[Š­‚ª“®‚­ŠÂ‹«)
+ MNC 9.3(ä»–ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼å§¦ãŒå‹•ãç’°å¢ƒ)
  Fuz Ro D-oh - Silent Voice
 
-„§:
+æ¨å¥¨:
  Blush When Aroused
- MMF,MMMF,MMMMF‚ÌSexlabƒAƒjƒ[ƒVƒ‡ƒ“
- SG Female Textures Renewal ¦ SG‚Åì¬BŠç‚ÌNormal‚Ì‚İ“Æ—§‰»B
- —«ƒtƒHƒƒ[Œó•â•ƒGƒŠƒVƒt”ü‰»
- ‚¨D‚İ‚Ìí“¬Mod (ActionCombatˆÈŠO‚Í–¢’²¸)
+ MMF,MMMF,MMMMFã®Sexlabã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³
+ SG Female Textures Renewal â€» SGã§ä½œæˆã€‚é¡”ã®Normalã®ã¿ç‹¬ç«‹åŒ–ã€‚
+ å¥³æ€§ãƒ•ã‚©ãƒ­ãƒ¯ãƒ¼å€™è£œï¼†ã‚¨ãƒªã‚·ãƒ•ç¾åŒ–
+ ãŠå¥½ã¿ã®æˆ¦é—˜Mod (ActionCombatä»¥å¤–ã¯æœªèª¿æŸ»)
 
-”ñ„§:
- ‰Ò“­ó‘Ô‚ÌDefeat
- ©“®“I‚É”­“®‚·‚éSexLabŠÖ˜A‚ÌMod(Rapespell“™)
- ƒVƒƒƒEƒgE–‚–@
+éæ¨å¥¨:
+ ç¨¼åƒçŠ¶æ…‹ã®Defeat
+ è‡ªå‹•çš„ã«ç™ºå‹•ã™ã‚‹SexLabé–¢é€£ã®Mod(Rapespellç­‰)
+ ã‚·ãƒ£ã‚¦ãƒˆãƒ»é­”æ³•
 
 Credit:
  Enhanced Character Edit by ECE team
@@ -34,3 +34,5 @@ Thanks:
  LoversLab
  nexusmods
  bbspink
+
+ Undress Spell by TESVOsaru

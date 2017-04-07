@@ -15,6 +15,10 @@ if (akActor.IsInFaction(SSLFCAudienceBackupFaction))
 	akActor.RemoveItem(ArmorEbonyBoots, 1)
 	akActor.RemoveItem(ArmorEbonyCuirass, 1)
 	akActor.RemoveItem(ArmorEbonyGauntlets, 1)
+	
+	akActor.AddItem(GoldRing, 1, True)
+	akActor.EquipItem(GoldRing, False, True)
+	akActor.RemoveItem(GoldRing, 1, True)
 
 	akActor.AddToFaction(SSLFCAudienceFaction)
 	akActor.RemoveFromFaction(SSLFCAudienceBackupFaction)
@@ -36,3 +40,5 @@ WEAPON Property EbonyMace  Auto
 Faction Property SSLFCAudienceFaction  Auto  
 
 Faction Property SSLFCAudienceBackupFaction  Auto  
+
+Armor Property GoldRing  Auto  

@@ -104,6 +104,13 @@ Function addBattleCount(Actor act, Bool isWinner)
 	else
 		act.SetFactionRank(SSLFCBattleCount, 1)
 	endif
+	
+	int lrank = act.GetFactionRank(SSLFCTodayLoserCount)
+	if (lrank && lrank < 100)
+		act.SetFactionRank(SSLFCTodayLoserCount, lrank + 1)
+	else
+		act.SetFactionRank(SSLFCTodayLoserCount, 1)
+	endif
 EndFunction
 
 Function payBounty(Actor act, Bool isWinner)
@@ -183,3 +190,5 @@ Faction Property SSLFCBattleCount  Auto
 Quest Property SSLFCBGBattleLoopAfter01  Auto  
 
 ReferenceAlias Property SSLFCBattleLoopLoser  Auto  
+
+Faction Property SSLFCTodayLoserCount  Auto  

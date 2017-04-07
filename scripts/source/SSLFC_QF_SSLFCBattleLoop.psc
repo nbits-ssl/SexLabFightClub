@@ -2,39 +2,9 @@
 ;NEXT FRAGMENT INDEX 20
 Scriptname SSLFC_QF_SSLFCBattleLoop Extends Quest Hidden
 
-;BEGIN ALIAS PROPERTY FemaleFighter
-;ALIAS PROPERTY TYPE ReferenceAlias
-ReferenceAlias Property Alias_FemaleFighter Auto
-;END ALIAS PROPERTY
-
 ;BEGIN ALIAS PROPERTY ArenaMaleWaitMarker
 ;ALIAS PROPERTY TYPE ReferenceAlias
 ReferenceAlias Property Alias_ArenaMaleWaitMarker Auto
-;END ALIAS PROPERTY
-
-;BEGIN ALIAS PROPERTY ArenaFemaleMarker
-;ALIAS PROPERTY TYPE ReferenceAlias
-ReferenceAlias Property Alias_ArenaFemaleMarker Auto
-;END ALIAS PROPERTY
-
-;BEGIN ALIAS PROPERTY winner
-;ALIAS PROPERTY TYPE ReferenceAlias
-ReferenceAlias Property Alias_winner Auto
-;END ALIAS PROPERTY
-
-;BEGIN ALIAS PROPERTY MaleFighter
-;ALIAS PROPERTY TYPE ReferenceAlias
-ReferenceAlias Property Alias_MaleFighter Auto
-;END ALIAS PROPERTY
-
-;BEGIN ALIAS PROPERTY Loser
-;ALIAS PROPERTY TYPE ReferenceAlias
-ReferenceAlias Property Alias_Loser Auto
-;END ALIAS PROPERTY
-
-;BEGIN ALIAS PROPERTY KeyManager
-;ALIAS PROPERTY TYPE ReferenceAlias
-ReferenceAlias Property Alias_KeyManager Auto
 ;END ALIAS PROPERTY
 
 ;BEGIN ALIAS PROPERTY Announcer
@@ -42,31 +12,77 @@ ReferenceAlias Property Alias_KeyManager Auto
 ReferenceAlias Property Alias_Announcer Auto
 ;END ALIAS PROPERTY
 
+;BEGIN ALIAS PROPERTY FemaleFighter
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_FemaleFighter Auto
+;END ALIAS PROPERTY
+
+;BEGIN ALIAS PROPERTY MaleFighter
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_MaleFighter Auto
+;END ALIAS PROPERTY
+
+;BEGIN ALIAS PROPERTY MaleFighter000
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_MaleFighter000 Auto
+;END ALIAS PROPERTY
+
+;BEGIN ALIAS PROPERTY ArenaFemaleMarker
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_ArenaFemaleMarker Auto
+;END ALIAS PROPERTY
+
+;BEGIN ALIAS PROPERTY KeyManager
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_KeyManager Auto
+;END ALIAS PROPERTY
+
 ;BEGIN ALIAS PROPERTY Player
 ;ALIAS PROPERTY TYPE ReferenceAlias
 ReferenceAlias Property Alias_Player Auto
 ;END ALIAS PROPERTY
 
-;BEGIN FRAGMENT Fragment_8
-Function Fragment_8()
+;BEGIN ALIAS PROPERTY winner
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_winner Auto
+;END ALIAS PROPERTY
+
+;BEGIN ALIAS PROPERTY Loser
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_Loser Auto
+;END ALIAS PROPERTY
+
+;BEGIN FRAGMENT Fragment_14
+Function Fragment_14()
 ;BEGIN AUTOCAST TYPE sslfcscript
 Quest __temp = self as Quest
 sslfcscript kmyQuest = __temp as sslfcscript
 ;END AUTOCAST
 ;BEGIN CODE
-Utility.Wait(1)
-float Time = Utility.GetCurrentGameTime()
-Time -= Math.Floor(Time)
-Time *= 24
-int hour = (Time as Int)
+kmyQuest.StartArenaBattle(Alias_MaleFighter, Alias_Player)
+SSLFCRingDoor.SetOpen(false)
+SSLFCRingDoor.Lock()
+SSLFCArenaNavCut.Enable()
+SSLFCArenaInvisibleWall.Enable()
 
-if (hour < 21 && hour > 11)
-	SSLFCBGAudienceOral01.Start()
-	SSLFCBGSexMagicTraining01.Start()
-	kmyQuest.StartArenaBattleLoop()
-else
-	self.SetStage(101)
+if (AfterEventWinner && AfterEventWinner != Alias_MaleFighter)
+	if (AfterEventLoser && AfterEventLoser != Alias_FemaleFighter)
+		SSLFCBGBattleLoopAfter01.SetStage(1)
+	endif
 endif
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_18
+Function Fragment_18()
+;BEGIN CODE
+SSLFCArenaNavCut.Disable()
+SSLFCArenaInvisibleWall.Disable()
+SSLFCRingDoor.Lock(false)
+SSLFCRingDoor.SetOpen()
+SSLFCBattleLoopExitWithPlayer.Start()
+Alias_MaleFighter.TryToEvaluatePackage()
 ;END CODE
 EndFunction
 ;END FRAGMENT
@@ -95,6 +111,16 @@ endif
 EndFunction
 ;END FRAGMENT
 
+;BEGIN FRAGMENT Fragment_10
+Function Fragment_10()
+;BEGIN CODE
+self.SetActive()
+self.SetObjectiveDisplayed(11)
+SSLFCBattleLoopWaitForPlayer.Start()
+;END CODE
+EndFunction
+;END FRAGMENT
+
 ;BEGIN FRAGMENT Fragment_0
 Function Fragment_0()
 ;BEGIN CODE
@@ -109,24 +135,27 @@ endif
 EndFunction
 ;END FRAGMENT
 
-;BEGIN FRAGMENT Fragment_16
-Function Fragment_16()
+;BEGIN FRAGMENT Fragment_8
+Function Fragment_8()
 ;BEGIN AUTOCAST TYPE sslfcscript
 Quest __temp = self as Quest
 sslfcscript kmyQuest = __temp as sslfcscript
 ;END AUTOCAST
 ;BEGIN CODE
-SSLFCBattleLoopEnterWithPlayer.Start()
-;END CODE
-EndFunction
-;END FRAGMENT
+Utility.Wait(1)
+float Time = Utility.GetCurrentGameTime()
+Time -= Math.Floor(Time)
+Time *= 24
+int hour = (Time as Int)
 
-;BEGIN FRAGMENT Fragment_10
-Function Fragment_10()
-;BEGIN CODE
-self.SetActive()
-self.SetObjectiveDisplayed(11)
-SSLFCBattleLoopWaitForPlayer.Start()
+if (hour < 21 && hour > 11)
+	SSLFCBGAudienceOral01.Start()
+	SSLFCBGSexMagicTraining01.Start()
+	kmyQuest.StartArenaBattleLoop()
+else
+	SSLFCBGBattleLoopEnd01.Start()
+	self.SetStage(101)
+endif
 ;END CODE
 EndFunction
 ;END FRAGMENT
@@ -160,37 +189,14 @@ Alias_MaleFighter.TryToEvaluatePackage()
 EndFunction
 ;END FRAGMENT
 
-;BEGIN FRAGMENT Fragment_18
-Function Fragment_18()
-;BEGIN CODE
-SSLFCArenaNavCut.Disable()
-SSLFCArenaInvisibleWall.Disable()
-SSLFCRingDoor.Lock(false)
-SSLFCRingDoor.SetOpen()
-SSLFCBattleLoopExitWithPlayer.Start()
-Alias_MaleFighter.TryToEvaluatePackage()
-;END CODE
-EndFunction
-;END FRAGMENT
-
-;BEGIN FRAGMENT Fragment_14
-Function Fragment_14()
+;BEGIN FRAGMENT Fragment_16
+Function Fragment_16()
 ;BEGIN AUTOCAST TYPE sslfcscript
 Quest __temp = self as Quest
 sslfcscript kmyQuest = __temp as sslfcscript
 ;END AUTOCAST
 ;BEGIN CODE
-kmyQuest.StartArenaBattle(Alias_MaleFighter, Alias_Player)
-SSLFCRingDoor.SetOpen(false)
-SSLFCRingDoor.Lock()
-SSLFCArenaNavCut.Enable()
-SSLFCArenaInvisibleWall.Enable()
-
-if (AfterEventWinner && AfterEventWinner != Alias_MaleFighter)
-	if (AfterEventLoser && AfterEventLoser != Alias_FemaleFighter)
-		SSLFCBGBattleLoopAfter01.SetStage(1)
-	endif
-endif
+SSLFCBattleLoopEnterWithPlayer.Start()
 ;END CODE
 EndFunction
 ;END FRAGMENT
@@ -228,3 +234,5 @@ Quest Property SSLFCBGAudienceOral01  Auto
 Quest Property SSLFCBGSexMagicTraining01  Auto  
 
 Quest Property SSLFCBGResetWeapon01  Auto  
+
+Quest Property SSLFCBGBattleLoopEnd01  Auto  
